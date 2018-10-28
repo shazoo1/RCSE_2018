@@ -2,26 +2,34 @@ import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
-
+# https://pypi.org/project/jupyter-tensorboard/
 
 # Setting our ops
 # Input
-x = tf.placeholder(tf.float32, [None, 784],name='input')
+with tf.name_scope('input') as scope:
+    x = tf.placeholder(tf.float32, [None, 784],name='input')
 
 keep_probability = tf.placeholder(tf.float32,name='prob')
 
-W_1 = tf.Variable(tf.truncated_normal([784, 784],stddev=0.1), name='weight_1')
-b_1 = tf.Variable(tf.truncated_normal([784],stddev=0.1), name='bias_1')
 
-hidden_layer_1 = tf.layers.dropout(tf.nn.relu(tf.matmul(x, W_1) + b_1))
+with tf.name_scope('layer1') as scope:
+
+    W_1 = tf.Variable(tf.truncated_normal(shape=[784, 784],stddev=0.1), name='weight_1')
+    b_1 = tf.Variable(tf.truncated_normal(shape=[784],stddev=0.1), name='bias_1')
 
 
-W_2 = tf.Variable(tf.zeros([784, 10]), name='weight_2')
-b_2 = tf.Variable(tf.zeros([10]), name='bias_2')
+with tf.name_scope('relu') as scope:
+    hidden_layer_1 = tf.layers.dropout(tf.nn.relu(tf.matmul(x, W_1) + b_1))
 
-y = tf.nn.softmax(tf.matmul(hidden_layer_1, W_2) + b_2)
+with tf.name_scope('layer2') as scope:
+    W_2 = tf.Variable(tf.zeros(shape=[784, 10]), name='weight_2')
+    b_2 = tf.Variable(tf.zeros(shape=[10]), name='bias_2')
 
-y_ = tf.placeholder(tf.float32, [None, 10],name='class')
+with tf.name_scope('softmax') as scope:
+    y = tf.nn.softmax(tf.matmul(hidden_layer_1, W_2) + b_2)
+
+with tf.name_scope('output') as scope:
+    y_ = tf.placeholder(tf.float32, [None, 10],name='class')
 
 cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y), reduction_indices=[1]), name='cross_entropy')
 
