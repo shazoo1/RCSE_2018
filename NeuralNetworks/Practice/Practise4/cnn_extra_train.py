@@ -13,8 +13,8 @@ from keras import optimizers
 import matplotlib.pyplot as plt
 
 
-train_dir = r"C:\Users\user\PycharmProjects\RCSE2018\NeuralNetworks\Practice\Practise4\images\train"
-validation_dir = r"C:\Users\user\PycharmProjects\RCSE2018\NeuralNetworks\Practice\Practise4\images\validation"
+train_dir = r"images\train"
+validation_dir = r"images\validation"
 image_size = 32
 
 def get_model(pretrained_model):
